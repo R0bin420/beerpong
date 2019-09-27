@@ -6,3 +6,9 @@
 form {
     margin-top: 5rem;
 }
+a {
+    text-decoration: none;
+}
+.tisch:hover{
+    text-decoration: underline;
+}
