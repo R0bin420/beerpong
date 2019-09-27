@@ -34,4 +34,11 @@ class HomeController extends AbstractController
     public function register() {
         return $this->render('home/register.html.twig');
     }
+    /**
+     * @Route("/2versus2", name="2versus2")
+     * @return Response
+     */
+    public function versus() {
+        return $this->render('home/2versus2.html.twig');
+    }
 }
