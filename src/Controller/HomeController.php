@@ -72,5 +72,20 @@ class HomeController extends AbstractController
     public function blog() {
         return $this->render('home/blog.html.twig');
     }
+    /**
+     * @Route("/admin", name="admin")
+     * @return Response
+     */
+    public function admin() {
+        return $this->render('home/admin.html.twig');
+    }
+    /**
+     * @Route("/profil", name="profil")
+     * @return Response
+     */
+    public function profil() {
+        return $this->render('home/profil.html.twig');
+    }
+
 
 }
