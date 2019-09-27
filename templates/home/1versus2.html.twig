@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+    <form >
+        <div class="form-group">
+            <label for="Username">Team1</label>
+            <input type="text" class="form-control" id="Username" placeholder="Player1">
+        </div>
+        <div class="form-group">
+            <label for="Username"></label>
+            <input type="text" class="form-control" id="Username" placeholder="Player2">
+        </div>
+    </form>
+    <form >
+        <div class="form-group">
+            <label for="Username">Team2</label>
+            <input type="text" class="form-control" id="Username" placeholder="Player1">
+        </div>
+    </form>
+    <a href="{{ url('finish') }}" class="btn btn-primary active" role="button" aria-pressed="true">Abfahrt</a>
+{% endblock %}

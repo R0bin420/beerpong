@@ -38,7 +38,39 @@ class HomeController extends AbstractController
      * @Route("/2versus2", name="2versus2")
      * @return Response
      */
-    public function versus() {
+    public function twoversus() {
         return $this->render('home/2versus2.html.twig');
     }
+
+    /**
+     * @Route("/1versus2", name="1versus2")
+     * @return Response
+     */
+    public function onwoversus() {
+        return $this->render('home/1versus2.html.twig');
+    }
+
+    /**
+     * @Route("/1versus1", name="1versus1")
+     * @return Response
+     */
+    public function oneversus() {
+        return $this->render('home/1versus1.html.twig');
+    }
+
+    /**
+     * @Route("/finish", name="finish")
+     * @return Response
+     */
+    public function finish() {
+        return $this->render('home/finish.html.twig');
+    }
+    /**
+     * @Route("/blog", name="blog")
+     * @return Response
+     */
+    public function blog() {
+        return $this->render('home/blog.html.twig');
+    }
+
 }
