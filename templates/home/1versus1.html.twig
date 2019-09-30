@@ -2,6 +2,18 @@
 
 
 {% block body %}
+    <div class="btn-group btn-group-toggle" data-toggle="button">
+        <label class="btn btn-primary active">
+            <input type="1v1" name="1v1" id="1v1" autocomplete="off" checked>1v1
+        </label>
+        <label class="btn btn-primary">
+            <input type="2v2" name="2v2" id="2v2" autocomplete="off" >2v2
+        </label>
+        <label class="btn btn-primary">
+            <input type="2v1" name="2v1" id="2v1" autocomplete="off" >2v1
+        </label>
+
+    </div>
     <form method="post">
         <div class="form-group">
             <label for="Username" for="player1">Team1</label>

@@ -121,6 +121,7 @@ class HomeController extends AbstractController
         EntityManagerInterface $manager,
         Request $request
     )
+
     {
         /** @var User[] $users */
         $users = $manager->getRepository(User::class)->findBy([], ['username' => 'ASC']);
@@ -132,9 +133,9 @@ class HomeController extends AbstractController
         $team2_user = $manager->getRepository(User::class)->find((int)$request->get("team2_player1"));
 
         if ($request->getMethod() == 'POST') {
-            if ($team1_user instanceof User && $team2_user instanceof User)  {
+            if ($team1_user instanceof User && $team2_user instanceof User) {
 
-                if($team1_user != $team2_user)  {
+                if ($team1_user != $team2_user) {
 
                     $game = new Game();
                     $game->setStartDate(new \DateTime());
@@ -159,22 +160,22 @@ class HomeController extends AbstractController
 
                     $manager->flush();
 
-                }
-                else {
+
+                } else {
                     echo "Man kann nicht gegensich selbst spielen";
                 }
 
-            }
-            else {
+            } else {
                 echo "Personen wurden nicht gefunden";
             }
         }
-        
-
         return $this->render('home/1versus1.html.twig', [
             "users" => $users
         ]);
+
     }
+
+
 
 
     /**
