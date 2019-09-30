@@ -15,7 +15,7 @@
 
         <div class="form-group">
             <label for="Username" for="player2">Team2</label>
-            <select class="form-control" name="player2" id="player2">
+            <select class="form-control" name="team2_player1" id="player2">
                 <option>Bitte wählen</option>
                 {% for user in users %}
                     <option value="{{ user.id }}">{{ user.username }}</option>
