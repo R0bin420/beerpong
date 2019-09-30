@@ -2,18 +2,26 @@
 
 
 {% block body %}
-    <form >
+    <form method="post">
         <div class="form-group">
-            <label for="Username">Team1</label>
-            <input type="text" class="form-control" id="Username" placeholder="Player1">
+            <label for="Username" for="player1">Team1</label>
+            <select class="form-control" name="team1_player1" id="player1">
+                <option>Bitte wählen</option>
+                {% for user in users %}
+                    <option value="{{ user.id }}">{{ user.username }}</option>
+                {% endfor %}
+            </select>
         </div>
 
-    </form>
-    <form >
         <div class="form-group">
-            <label for="Username">Team2</label>
-            <input type="text" class="form-control" id="Username" placeholder="Player1">
+            <label for="Username" for="player2">Team2</label>
+            <select class="form-control" name="player2" id="player2">
+                <option>Bitte wählen</option>
+                {% for user in users %}
+                    <option value="{{ user.id }}">{{ user.username }}</option>
+                {% endfor %}
+            </select>
         </div>
+        <button class="btn btn-primary active" role="button" aria-pressed="true">Abfahrt</button>
     </form>
-    <a href="{{ url('finish') }}" class="btn btn-primary active" role="button" aria-pressed="true">Abfahrt</a>
 {% endblock %}

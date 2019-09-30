@@ -19,33 +19,40 @@
                     <li class="nav-item active">
                         <a class="nav-link" href="{{ url('home') }}">Home <span class="sr-only">(current)</span></a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url('profil') }}">Profil</a>
-                    </li>
+                    {% if app.user %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url('profil') }}">Profil</a>
+                        </li>
+                    {% endif %}
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url('blog') }}">Regeln</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url('admin') }}">Admin</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url('login') }}">Login</a>
-                    </li>
+                    {% if app.user %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url('admin') }}">Admin</a>
+                        </li>
+                    {% endif %}
+                    {% if app.user is null %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url('app_login') }}">Login</a>
+                        </li>
+                    {% endif %}
                 </ul>
             </div>
         </nav>
         <div class="container">
-
-            <div class="dropdown">
-                <a class="btn btn-danger dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Neues Spiel
-                </a>
-                <div class="dropdown-menu"  aria-labelledby="dropdownMenuLink">
-                    <a class="dropdown-item" href="{{ url('1versus1') }}">1v1</a>
-                    <a class="dropdown-item" href="{{ url('2versus2') }}">2v2</a>
-                    <a class="dropdown-item" href="{{ url('1versus2') }}">2v1</a>
+            {% if app.user %}
+                <div class="dropdown">
+                    <a class="btn btn-danger dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Neues Spiel
+                    </a>
+                    <div class="dropdown-menu"  aria-labelledby="dropdownMenuLink">
+                        <a class="dropdown-item" href="{{ url('1versus1') }}">1v1</a>
+                        <a class="dropdown-item" href="{{ url('2versus2') }}">2v2</a>
+                        <a class="dropdown-item" href="{{ url('1versus2') }}">2v1</a>
+                    </div>
                 </div>
-            </div>
+            {% endif %}
 
             {% block body %}{% endblock %}
         </div>

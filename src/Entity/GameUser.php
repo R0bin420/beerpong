@@ -22,16 +22,16 @@ class GameUser
     private $team;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="games")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $User;
-
-    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Game", inversedBy="users")
      * @ORM\JoinColumn(nullable=false)
      */
     private $game;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="games")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $User;
 
     public function getId(): ?int
     {
@@ -50,18 +50,6 @@ class GameUser
         return $this;
     }
 
-    public function getUser(): ?User
-    {
-        return $this->User;
-    }
-
-    public function setUser(?User $User): self
-    {
-        $this->User = $User;
-
-        return $this;
-    }
-
     public function getGame(): ?Game
     {
         return $this->game;
@@ -70,6 +58,18 @@ class GameUser
     public function setGame(?Game $game): self
     {
         $this->game = $game;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->User;
+    }
+
+    public function setUser(?User $User): self
+    {
+        $this->User = $User;
 
         return $this;
     }
