@@ -11,6 +11,11 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Game
 {
+    CONST WINTYPE_DEFAULT = 1;
+    CONST WINTYPE_SHAVED = 2;
+    CONST WINTYPE_BLITZKO = 3;
+
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -37,6 +42,11 @@ class Game
      * @ORM\OneToMany(targetEntity="App\Entity\GameUser", mappedBy="game", orphanRemoval=true)
      */
     private $users;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $winType;
 
     public function __construct()
     {
@@ -111,6 +121,18 @@ class Game
                 $user->setGame(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getWinType(): ?int
+    {
+        return $this->winType;
+    }
+
+    public function setWinType(?int $winType): self
+    {
+        $this->winType = $winType;
 
         return $this;
     }

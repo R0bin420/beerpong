@@ -35,7 +35,8 @@ class HomeController extends AbstractController
         EntityManagerInterface $manager,
         Request $request,
         UserPasswordEncoderInterface $encoder
-    ) {
+    )
+    {
         if ($this->getUser()) {
             return $this->redirectToRoute('home');
         }
@@ -64,9 +65,8 @@ class HomeController extends AbstractController
                         // Schritt 4. Eintragen in die Datenbank
                         $newUser = new User();
                         $newUser
-                            ->setPassword($encoder->encodePassword($newUser,$password))
-                            ->setUsername($username)
-                        ;
+                            ->setPassword($encoder->encodePassword($newUser, $password))
+                            ->setUsername($username);
 
                         $manager->persist($newUser);
                         $manager->flush();
@@ -83,32 +83,7 @@ class HomeController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/2versus2", name="2versus2")
-     * @param EntityManagerInterface $manager
-     * @param Request $request
-     * @return Response
-     */
-    public function twoversus(
-        EntityManagerInterface $manager,
-        Request $request
-    ) {
-        $users = $manager->getRepository(User::class)->findBy([], ['username' => 'ASC']);
 
-        var_dump($request->get('team1'));
-        //die();
-        return $this->render('home/2versus2.html.twig', [
-            "users" => $users
-        ]);
-    }
-
-    /**
-     * @Route("/1versus2", name="1versus2")
-     * @return Response
-     */
-    public function onwoversus() {
-        return $this->render('home/1versus2.html.twig');
-    }
 
     /**
      * @Route("/1versus1", name="1versus1")
@@ -129,60 +104,90 @@ class HomeController extends AbstractController
         // Schritt 1. Variablen deklarieren
         $error = "";
         // Schritt 2. Aus Anfrage Daten holen
-        $team1_user = $manager->getRepository(User::class)->find((int)$request->get("team1_player1"));
-        $team2_user = $manager->getRepository(User::class)->find((int)$request->get("team2_player1"));
+        $team1_user1 = $manager->getRepository(User::class)->find((int)$request->get("team1_player1"));
+        $team1_user2 = $manager->getRepository(User::class)->find((int)$request->get("team1_player2"));
+        $team2_user1 = $manager->getRepository(User::class)->find((int)$request->get("team2_player1"));
+        $team2_user2 = $manager->getRepository(User::class)->find((int)$request->get("team2_player2"));
+
 
         if ($request->getMethod() == 'POST') {
-            if ($team1_user instanceof User && $team2_user instanceof User) {
+            if ($team1_user1 instanceof User && $team2_user1 instanceof User) {
 
-                if ($team1_user != $team2_user) {
-
+                if ($team1_user1 != $team2_user1) {
                     $game = new Game();
                     $game->setStartDate(new \DateTime());
-                    $game->setWinnerTeam(1);
-
                     $manager->persist($game);
 
                     $gameUser1 = new GameUser();
-                    $gameUser1->setUser($team1_user);
+                    $gameUser1->setUser($team1_user1);
                     $gameUser1->setGame($game);
                     $gameUser1->setTeam(1);
 
                     $manager->persist($gameUser1);
 
-
                     $gameUser2 = new GameUser();
-                    $gameUser2->setUser($team2_user);
+                    $gameUser2->setUser($team2_user1);
                     $gameUser2->setGame($game);
                     $gameUser2->setTeam(2);
 
+
                     $manager->persist($gameUser2);
+
+
+                    if ($team1_user2 instanceof User) {
+                        $gameUser3 = new GameUser();
+                        $gameUser3->setUser($team1_user2);
+                        $gameUser3->setGame($game);
+                        $gameUser3->setTeam(1);
+
+                        $manager->persist($gameUser3);
+                    }
+
+                    if ($team2_user2 instanceof User) {
+                        $gameUser4 = new GameUser();
+                        $gameUser4->setUser($team2_user2);
+                        $gameUser4->setGame($game);
+                        $gameUser4->setTeam(2);
+
+                        $manager->persist($gameUser4);
+                    }
 
                     $manager->flush();
 
-
+                    return $this->redirectToRoute("finish",['id' => $game->getId()]);
                 } else {
-                    echo "Man kann nicht gegensich selbst spielen";
+                    echo "<div class='alert alert-danger' role='alert'>Man kann nicht gegen sich selbst spielen</div>";
                 }
 
+
             } else {
-                echo "Personen wurden nicht gefunden";
+                echo "<div class='alert alert-danger' role='alert'>Person nicht gefunden</div>";
             }
         }
         return $this->render('home/1versus1.html.twig', [
             "users" => $users
         ]);
-
     }
-
-
 
 
     /**
      * @Route("/finish", name="finish")
+     * @param Request $request
      * @return Response
      */
-    public function finish() {
+    public function finish(
+        Request $request
+    ) {
+        $gameId = $request->get('id');
+
+        // 1. Prüfen ob Game mit Game ID exisitert, wenn nicht, wieder umleiten.
+        //if ($gameId ==)
+        // 2. Forms machen zum Senden des Ergebnisses
+        // 3. Request auf Post prüfen und Daten speichern (Gewinner usw.)
+        // 4. Danach umleiten auf Home?
+
+        // $game->setWinType(Game::WINTYPE_SHAVED)
+
         return $this->render('home/finish.html.twig');
     }
     /**
