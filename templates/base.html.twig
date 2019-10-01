@@ -42,16 +42,7 @@
         </nav>
         <div class="container">
             {% if app.user %}
-                <div class="dropdown">
-                    <a class="btn btn-danger dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Neues Spiel
-                    </a>
-                    <div class="dropdown-menu"  aria-labelledby="dropdownMenuLink">
-                        <a class="dropdown-item" href="{{ url('1versus1') }}">1v1</a>
-                        <a class="dropdown-item" href="{{ url('2versus2') }}">2v2</a>
-                        <a class="dropdown-item" href="{{ url('1versus2') }}">2v1</a>
-                    </div>
-                </div>
+               <a href="{{ url('1versus1') }}" class="btn btn-danger active new-game" role="button" aria-pressed="true">Neues Spiel</a>
             {% endif %}
 
             {% block body %}{% endblock %}

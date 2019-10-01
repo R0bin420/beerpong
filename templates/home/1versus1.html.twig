@@ -2,19 +2,13 @@
 
 
 {% block body %}
-    <div class="btn-group btn-group-toggle" data-toggle="button">
-        <label class="btn btn-primary active">
-            <input type="1v1" name="1v1" id="1v1" autocomplete="off" checked>1v1
-        </label>
-        <label class="btn btn-primary">
-            <input type="2v2" name="2v2" id="2v2" autocomplete="off" >2v2
-        </label>
-        <label class="btn btn-primary">
-            <input type="2v1" name="2v1" id="2v1" autocomplete="off" >2v1
-        </label>
+    <select onchange="changeForm()" id="playerCountSelect" class="form-control">
+            <option value="1" selected>1 Gegen 1</option>
+            <option value="2">2 Gegen 2</option>
+            <option value="3">1 Gegen 2</option>
+    </select>
 
-    </div>
-    <form method="post">
+    <form method="post" id="form_1vs1" class="d-none">
         <div class="form-group">
             <label for="Username" for="player1">Team1</label>
             <select class="form-control" name="team1_player1" id="player1">
@@ -36,4 +30,103 @@
         </div>
         <button class="btn btn-primary active" role="button" aria-pressed="true">Abfahrt</button>
     </form>
+
+    <form method="post" id="form_1vs2" class="d-none">
+            <div class="form-group">
+                <label for="Username" for="player1">Team1</label>
+                <select class="form-control" name="team1_player1" id="player1">
+                    <option>Bitte wählen</option>
+                    {% for user in users %}
+                        <option value="{{ user.id }}">{{ user.username }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="Username" for="player1">Team2</label>
+                <select class="form-control" name="team2_player1" id="player1">
+                    <option>Bitte wählen</option>
+                    {% for user in users %}
+                        <option value="{{ user.id }}">{{ user.username }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="Username" for="player1"></label>
+                <select class="form-control" name="team2_player2" id="player2">
+                    <option>Bitte wählen</option>
+                    {% for user in users %}
+                        <option value="{{ user.id }}">{{ user.username }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        <button class="btn btn-primary active" role="button" aria-pressed="true">Abfahrt</button>
+    </form>
+
+    <form method="post" id="form_2vs2" class="d-none">
+        <div class="form-group">
+            <label for="Username" for="player1">Team1</label>
+            <select class="form-control" name="team1_player1" id="player1">
+                <option>Bitte wählen</option>
+                {% for user in users %}
+                    <option value="{{ user.id }}">{{ user.username }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="Username" for="player1"></label>
+            <select class="form-control" name="team1_player2" id="player2">
+                <option>Bitte wählen</option>
+                {% for user in users %}
+                    <option value="{{ user.id }}">{{ user.username }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="Username" for="player2">Team2</label>
+            <select class="form-control" name="team2_player1" id="player1">
+                <option>Bitte wählen</option>
+                {% for user in users %}
+                    <option value="{{ user.id }}">{{ user.username }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    <div class="form-group">
+            <label for="Username" for="player2"></label>
+            <select class="form-control" name="team2_player2" id="player2">
+                <option>Bitte wählen</option>
+                {% for user in users %}
+                    <option value="{{ user.id }}">{{ user.username }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button class="btn btn-primary active" role="button" aria-pressed="true">Abfahrt</button>
+    </form>
+
+
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        function changeForm() {
+            let formType = parseInt($('#playerCountSelect').val());
+
+            if (formType === 1) {
+                $('#form_1vs1').removeClass('d-none');
+                $('#form_1vs2').addClass('d-none');
+                $('#form_2vs2').addClass('d-none');
+
+            } else if (formType === 2) {
+                $('#form_1vs1').addClass('d-none');
+                $('#form_1vs2').addClass('d-none');
+                $('#form_2vs2').removeClass('d-none');
+            } else if (formType === 3) {
+                $('#form_1vs2').removeClass('d-none');
+                $('#form_1vs1').addClass('d-none');
+                $('#form_2vs2').addClass('d-none');
+            }
+        }
+
+        changeForm();
+    </script>
 {% endblock %}
