@@ -6,6 +6,8 @@ use App\Entity\Game;
 use App\Entity\GameUser;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Query\Expr\Select;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -176,20 +178,33 @@ class HomeController extends AbstractController
      * @return Response
      */
     public function finish(
+        EntityManagerInterface $manager,
         Request $request
-    ) {
-        $gameId = $request->get('id');
+){
+        return $this->render('home/finish.html.twig');
+
+         $gameId = $request->get('id');
 
         // 1. Prüfen ob Game mit Game ID exisitert, wenn nicht, wieder umleiten.
-        //if ($gameId ==)
+        $url_id = mysqli_real_escape_string($_GET['id']);
+        $sql = "SELECT id FROM game_user WHERE id='$url_id'";
+        $result = mysqli_query($sql);
+        if (mysqli_num_rows($result) >0){
+            echo "test";
+        }else{
+            echo "test";
+        }
+
         // 2. Forms machen zum Senden des Ergebnisses
         // 3. Request auf Post prüfen und Daten speichern (Gewinner usw.)
+        if ($request->getMethod()== 'POST'){
+
+        }
         // 4. Danach umleiten auf Home?
 
         // $game->setWinType(Game::WINTYPE_SHAVED)
 
-        return $this->render('home/finish.html.twig');
-    }
+   }
     /**
      * @Route("/blog", name="blog")
      * @return Response
