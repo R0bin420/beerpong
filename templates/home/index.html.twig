@@ -2,45 +2,30 @@
 
 
 {% block body %}
-    <div class="card-deck">
-        <div class="card">
-            <img src="..." class="card-img-top" alt="...">
-            <div class="card-body">
-                <h5 class="card-title">Int. winner</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            </div>
-        </div>  <div class="card">
-            <img src="..." class="card-img-top" alt="...">
-            <div class="card-body">
-                <h5 class="card-title">Int. winner</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            </div>
-        </div>  <div class="card">
-            <img src="..." class="card-img-top" alt="...">
-            <div class="card-body">
-                <h5 class="card-title">Int. winner</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            </div>
+
+        <div class="card-deck">
+            {% for i,user in users %}
+
+                {% if i + 1 < 4 %}
+                    <div class="card" >
+                        <img src="{#  asset('bild_zum_bild/card_' + i + '.png') #}"  class="card-img-top" >
+                        <div class="card-body">
+                            <h5 class="card-title">{{ i + 1 }} - {{ user.username }} - {{ user.point }} <br /></h5>
+                            <p class="card-text"></p>
+                        </div>
+                    </div>
+                {% endif %}
+
+            {% endfor %}
         </div>
-    </div>
+    <div class="mt-3"></div>
     <ul class="list-group">
-        <li class="list-group-item">1</li>
-        <li class="list-group-item">1</li>
-        <li class="list-group-item">1</li>
-        <li class="list-group-item">1</li>
-        <li class="list-group-item">1</li>
-        <li class="list-group-item">1</li>
-        <li class="list-group-item">1</li>
-        <li class="list-group-item">1</li>
-        <li class="list-group-item">1</li>
-        <li class="list-group-item">1</li>
-        <li class="list-group-item">1</li>
-        <li class="list-group-item">1</li>
-        <li class="list-group-item">1</li>
-        <li class="list-group-item">1</li>
-        <li class="list-group-item">1</li>
-        <li class="list-group-item">1</li>
-        <li class="list-group-item">1</li>
+        {% for i,user in users %}
+            {% if i + 1 >= 4 %}
+                <li class="list-group-item">{{ i + 1 }} - {{ user.username }} - {{ user.point }} <br /></li>
+            {% endif %}
+        {% endfor %}
     </ul>
+
 
 {% endblock %}
