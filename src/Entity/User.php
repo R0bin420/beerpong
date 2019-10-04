@@ -40,6 +40,11 @@ class User implements UserInterface
      */
     private $games;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $point;
+
     public function __construct()
     {
         $this->games = new ArrayCollection();
@@ -152,5 +157,17 @@ class User implements UserInterface
     public function __toString()
     {
         return (string)$this->username;
+    }
+
+    public function getPoint(): ?int
+    {
+        return $this->point;
+    }
+
+    public function setPoint(?int $point): self
+    {
+        $this->point = $point;
+
+        return $this;
     }
 }
