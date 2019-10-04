@@ -18,11 +18,17 @@ class HomeController extends AbstractController
 {
     /**
      * @Route("/home", name="home")
+     * @param EntityManagerInterface $manager
+     * @return Response
      */
-    public function index()
+    public function index(
+        EntityManagerInterface $manager
+    )
     {
+        $users = $manager->getRepository(User::class)->findBy([],['point' => 'DESC']);
+
         return $this->render('home/index.html.twig', [
-            'controller_name' => 'HomeController',
+            'users' => $users
         ]);
     }
 
@@ -177,6 +183,7 @@ class HomeController extends AbstractController
      * @param EntityManagerInterface $manager
      * @param Request $request
      * @return Response
+     * @throws Exception
      */
     public function finish(
         EntityManagerInterface $manager,
@@ -188,6 +195,9 @@ class HomeController extends AbstractController
         if (is_null($game)) {
             return $this->redirectToRoute('1versus1');
         }
+        if (!is_null($game->getEndDate())) {
+            return $this->redirectToRoute('profil');
+        }
 
         // 2. Forms machen zum Senden des Ergebnisses; OK
         // 3. Request auf Post prüfen und Daten speichern (Gewinner usw.)
@@ -195,21 +205,51 @@ class HomeController extends AbstractController
             if ($request->get('team1_win') == '1') {
                 $game->setWinnerTeam(1);
                 $game->setWinType(Game::WINTYPE_DEFAULT);
+                $winner = $game->getUsersFromTeam(1);
+                foreach($winner as $user) {
+                    $user->setPoint($user->getPoint() + 1);
+                    $manager->persist($user);
+                }
             } elseif ($request->get('team1_shave') == '1') {
                 $game->setWinnerTeam(1);
                 $game->setWinType(GAME::WINTYPE_SHAVED);
+                $winner = $game->getUsersFromTeam(1);
+                foreach($winner as $user) {
+                    $user->setPoint($user->getPoint() + 3);
+                    $manager->persist($user);
+                }
             } elseif ($request->get('team1_blitzko')){
                 $game->setWinnerTeam(1);
                 $game->setWinType(GAME::WINTYPE_BLITZKO);
+                $winner = $game->getUsersFromTeam(1);
+                foreach($winner as $user) {
+                    $user->setPoint($user->getPoint() + 5);
+                    $manager->persist($user);
+                }
             }elseif ($request->get('team2_win')){
                 $game->setWinnerTeam(2);
                 $game->setWinType(GAME::WINTYPE_DEFAULT);
+                $winner = $game->getUsersFromTeam(2);
+                foreach($winner as $user) {
+                    $user->setPoint($user->getPoint() + 1);
+                    $manager->persist($user);
+                }
             } elseif ($request->get('team2_shave')){
                 $game->setWinnerTeam(2);
                 $game->setWinType(GAME::WINTYPE_SHAVED);
+                $winner = $game->getUsersFromTeam(2);
+                foreach($winner as $user) {
+                    $user->setPoint($user->getPoint() + 3);
+                    $manager->persist($user);
+                }
             } elseif ($request->get('team2_blitzko')){
                 $game->setWinnerTeam(2);
                 $game->setWinType(GAME::WINTYPE_BLITZKO);
+                $winner = $game->getUsersFromTeam(2);
+                foreach($winner as $user) {
+                    $user->setPoint($user->getPoint() + 5);
+                    $manager->persist($user);
+                }
             }
 
 
@@ -218,7 +258,6 @@ class HomeController extends AbstractController
             $manager->persist($game);
             $manager->flush();
 
-            // 4. Danach umleiten auf Home?
             return $this->redirectToRoute("home");
         }
 
@@ -226,19 +265,24 @@ class HomeController extends AbstractController
 
    }
     /**
-     * @Route("/blog", name="blog")
+     * @Route("/rules", name="rules")
      * @return Response
      */
-    public function blog() {
-        return $this->render('home/blog.html.twig');
+    public function rules() {
+        return $this->render('home/rules.html.twig');
     }
 
     /**
      * @Route("/profil", name="profil")
      * @return Response
+
      */
     public function profil() {
-        return $this->render('home/profil.html.twig');
+        /** @var User $me */
+        $me = $this->getUser();
+        return $this->render('home/profil.html.twig', [
+            'games' => $me->getGames()
+        ]);
     }
 
 

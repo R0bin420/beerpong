@@ -145,4 +145,16 @@ class Game
 
         return $this->getStartDate()->format('d.m.Y') . " (" . implode(", ", $usernames) . ")";
     }
+
+    /**
+     * @param int $team
+     * @return User[]
+     */
+    public function getUsersFromTeam(int $team) : array {
+        $return = [];
+        foreach($this->getUsers() as $user)
+            if ($user->getTeam() == $team)
+                $return[] = $user->getUser();
+        return $return;
+    }
 }
