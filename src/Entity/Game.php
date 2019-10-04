@@ -136,4 +136,13 @@ class Game
 
         return $this;
     }
+
+    public function __toString()
+    {
+        $usernames = [];
+        foreach($this->getUsers() as $user)
+            $usernames[] = $user->getUser()->getUsername();
+
+        return $this->getStartDate()->format('d.m.Y') . " (" . implode(", ", $usernames) . ")";
+    }
 }

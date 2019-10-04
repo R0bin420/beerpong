@@ -73,4 +73,9 @@ class GameUser
 
         return $this;
     }
+
+    public function __toString()
+    {
+        return (string) $this->getUser()->getUsername() . " (" . $this->getGame()->getStartDate()->format('d.m.Y') . ")";
+    }
 }
