@@ -2,20 +2,17 @@
 
 
 {% block body %}
-    {% for i,game in games  %}
-        {% endfor %}
+   {% for i,game in games %}
+    {% if i + 1 %}
+        l
     <ul id="games" class="list-group">
         <li class="list-group-item"></li>
-        <li class="list-group-item"></li>
-        <li class="list-group-item"></li>
-        <li class="list-group-item"></li>
-        <li class="list-group-item"></li>
-        <li class="list-group-item"></li>
-        <li class="list-group-item"></li>
-        <li class="list-group-item"></li>
+{# startdate | format(d.m.Y) #}
     </ul>
-    {% endfor %}
-    <a type="button" href="{{ url('app_logout') }}" class="btn btn-danger" style="position: fixed; top: 0.5rem; right: 5rem;">Abmelden</a> 
+
+     {% endif %}
+   {% endfor %}
+    <a type="button" href="{{ url('app_logout') }}" class="btn btn-danger" style="position: fixed; top: 0.5rem; right: 5rem;">Abmelden</a>
 
 
 {% endblock %}

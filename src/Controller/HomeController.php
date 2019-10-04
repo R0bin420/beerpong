@@ -275,11 +275,16 @@ class HomeController extends AbstractController
     /**
      * @Route("/profil", name="profil")
      * @return Response
+     * @param EntityManagerInterface $manager
 
      */
-    public function profil() {
+        public function profil(
+            EntityManagerInterface $manager
+
+        ) {
         /** @var User $me */
-        $me = $this->getUser();
+
+            $me = $this->getUser();
         return $this->render('home/profil.html.twig', [
             'games' => $me->getGames()
         ]);
