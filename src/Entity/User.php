@@ -43,7 +43,7 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
-    private $point;
+    private $point = 0;
 
     public function __construct()
     {
