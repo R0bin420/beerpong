@@ -5,9 +5,9 @@ namespace App\Controller;
 use App\Entity\Game;
 use App\Entity\GameUser;
 use App\Entity\User;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Mapping\Id;
-use Doctrine\ORM\Query\Expr\Select;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -92,7 +92,7 @@ class HomeController extends AbstractController
      * @param EntityManagerInterface $manager
      * @param Request $request
      * @return Response
-     * @throws \Exception
+     * @throws Exception
      */
     public function oneversus(
         EntityManagerInterface $manager,
@@ -104,7 +104,7 @@ class HomeController extends AbstractController
         $users = $manager->getRepository(User::class)->findBy([], ['username' => 'ASC']);
 
         // Schritt 1. Variablen deklarieren
-        $error = "";
+
         // Schritt 2. Aus Anfrage Daten holen
         $team1_user1 = $manager->getRepository(User::class)->find((int)$request->get("team1_player1"));
         $team1_user2 = $manager->getRepository(User::class)->find((int)$request->get("team1_player2"));
@@ -117,7 +117,7 @@ class HomeController extends AbstractController
 
                 if ($team1_user1 != $team2_user1) {
                     $game = new Game();
-                    $game->setStartDate(new \DateTime());
+                    $game->setStartDate(new DateTime());
                     $manager->persist($game);
 
                     $gameUser1 = new GameUser();
@@ -174,6 +174,7 @@ class HomeController extends AbstractController
 
     /**
      * @Route("/finish", name="finish")
+     * @param EntityManagerInterface $manager
      * @param Request $request
      * @return Response
      */
@@ -181,28 +182,47 @@ class HomeController extends AbstractController
         EntityManagerInterface $manager,
         Request $request
 ){
-        return $this->render('home/finish.html.twig');
-
-         $gameId = $request->get('id');
-
         // 1. Prüfen ob Game mit Game ID exisitert, wenn nicht, wieder umleiten.
-        $url_id = mysqli_real_escape_string($_GET['id']);
-        $sql = "SELECT id FROM game_user WHERE id='$url_id'";
-        $result = mysqli_query($sql);
-        if (mysqli_num_rows($result) >0){
-            echo "test";
-        }else{
-            echo "test";
+        $gameId = $request->get('id');
+        $game = $manager->find(Game::class,$gameId);
+        if (is_null($game)) {
+            return $this->redirectToRoute('1versus1');
         }
 
-        // 2. Forms machen zum Senden des Ergebnisses
+        // 2. Forms machen zum Senden des Ergebnisses; OK
         // 3. Request auf Post prüfen und Daten speichern (Gewinner usw.)
         if ($request->getMethod()== 'POST'){
+            if ($request->get('team1_win') == '1') {
+                $game->setWinnerTeam(1);
+                $game->setWinType(Game::WINTYPE_DEFAULT);
+            } elseif ($request->get('team1_shave') == '1') {
+                $game->setWinnerTeam(1);
+                $game->setWinType(GAME::WINTYPE_SHAVED);
+            } elseif ($request->get('team1_blitzko')){
+                $game->setWinnerTeam(1);
+                $game->setWinType(GAME::WINTYPE_BLITZKO);
+            }elseif ($request->get('team2_win')){
+                $game->setWinnerTeam(2);
+                $game->setWinType(GAME::WINTYPE_DEFAULT);
+            } elseif ($request->get('team2_shave')){
+                $game->setWinnerTeam(2);
+                $game->setWinType(GAME::WINTYPE_SHAVED);
+            } elseif ($request->get('team2_blitzko')){
+                $game->setWinnerTeam(2);
+                $game->setWinType(GAME::WINTYPE_BLITZKO);
+            }
 
+
+            $game->setEndDate(new DateTime());
+
+            $manager->persist($game);
+            $manager->flush();
+
+            // 4. Danach umleiten auf Home?
+            return $this->redirectToRoute("home");
         }
-        // 4. Danach umleiten auf Home?
 
-        // $game->setWinType(Game::WINTYPE_SHAVED)
+        return $this->render('home/finish.html.twig');
 
    }
     /**
@@ -212,13 +232,7 @@ class HomeController extends AbstractController
     public function blog() {
         return $this->render('home/blog.html.twig');
     }
-    /**
-     * @Route("/admin", name="admin")
-     * @return Response
-     */
-    public function admin() {
-        return $this->render('home/admin.html.twig');
-    }
+
     /**
      * @Route("/profil", name="profil")
      * @return Response
